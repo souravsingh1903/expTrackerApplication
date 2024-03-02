@@ -89,4 +89,7 @@ function login(event) {
         .catch((error) => {
             console.error(error);
         });
+
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
 }
