@@ -8,10 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-
+<div class="main-container">
     <div class="signup-container">
         <h2>Sign Up</h2>
-        <form  onsubmit="signUp(event)">
+        <form onsubmit="signUp(event)">
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
@@ -24,10 +24,13 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit" class="submit-btn">Sign Up</button>
+            <button type="button" class="submit-btn" onclick="signUpForm()">Sign Up</button><br>
+            <button type="button" class="submit-btn" onclick="loginForm()">Existing User Or Login</button>
         </form>
     </div>
+</div>
 
-</body>
 <script src="index.js"></script>
+</body>
 </html>
+    
