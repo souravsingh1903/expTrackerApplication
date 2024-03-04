@@ -50,3 +50,23 @@ input {
 .submit-btn:hover {
     background-color: #45a049;
 }
+
+a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure the link takes the full height of its container */
+  }
+  
+  /* Basic styling for the link */
+  a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  /* Change color on hover */
+  a:hover {
+    color: #0056b3;
+  }
