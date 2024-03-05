@@ -13,7 +13,7 @@ function signUp(event) {
 
     axios.post("http://localhost:8000/user/sign-up", signUpData)
         .then(response => {
-            console.log(response);
+            console.log(response.data);
         })
         .catch((error) => {
             console.error(error);

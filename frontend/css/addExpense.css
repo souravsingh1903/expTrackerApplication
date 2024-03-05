@@ -1,45 +1,134 @@
+/* CSS for Expense List and Form */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background-color: #f1f1f1;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+.add-expense-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Single column for both form and list */
+  max-width: 800px;
+  width: 90%; /* Take up 90% of the viewport width */
+  gap: 20px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
-  
-  form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+}
+
+h2 {
+  text-align: center;
+  color: #3498db;
+}
+
+form {
+  display: grid;
+  grid-gap: 10px;
+}
+
+label {
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+input,
+select {
+  width: 100%;
+  max-width: 100%; /* Set maximum width to 100% */
+  padding: 12px;
+  border: 2px solid #bdc3c7;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box; /* Include padding and border in the total width and height */
+}
+
+button {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #27ae60;
+}
+
+#expenseList {
+  list-style-type: none;
+  padding: 0;
+}
+
+#expenseList li {
+  background-color: #ecf0f1;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 12px;
+  position: relative;
+}
+
+
+#expenseList li button {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust the right spacing as needed */
+  transform: translateY(-50%);
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#expenseList li button:hover {
+  background-color: #c0392b;
+}
+
+/* Add some animated emojis */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
   }
-  
-  label {
-    display: block;
-    margin-bottom: 8px;
+  40% {
+    transform: translateY(-20px);
   }
-  
-  input,
-  select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 16px;
-    box-sizing: border-box;
+  60% {
+    transform: translateY(-10px);
   }
-  
-  button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+}
+
+.emoji {
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+  .add-expense-container {
+    width: 100%; /* Take up full width on smaller screens */
   }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+}
+
+strong {
+  color: #3498db; /* Change the color as needed */
+}
+
+/* Add any additional styling as per your requirement */
+

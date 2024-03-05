@@ -4,41 +4,36 @@
 function handleFormSubmit(event) {
     event.preventDefault();
 
+    const date = document.getElementById('expenseDate').value;
+    const name = document.getElementById('expenseName').value;
     const amount = document.getElementById('expenseAmount').value;
-    const description = document.getElementById('expenseName').value;
     const category = document.getElementById('expenseCategory').value;
 
     const expense_obj = {
+        date,
+        name,
         amount,
-        description,
         category
     };
 
-    axios.post('http://localhost:8000/expense/add-expense', expense_obj)
+    axios.post('http://localhost:8000/expense/addExpense', expense_obj)
         .then(response => {
             console.log('Expense added successfully:', response.data);
             displayExpense(response.data);  // Assuming the server sends back the created expense
         })
         .catch(error => {
-            handleErrorResponse(error);
+            console.error('Error adding expense:', error);
         });
 
     // Clear input fields after submission
+    document.getElementById('expenseDate').value = '';
     document.getElementById('expenseAmount').value = '';
     document.getElementById('expenseName').value = '';
     document.getElementById('expenseCategory').value = '';
 }
 
-// Function to handle error response
-function handleErrorResponse(error) {
-    if (error.response && error.response.data && error.response.data.errors) {
-        const errorMessages = error.response.data.errors.map(errorItem => errorItem.message).join(', ');
-        alert(`Error adding expense: ${errorMessages}`);
-    } else {
-        console.error('Error adding expense:', error);
-        alert('An error occurred while adding the expense. Please try again later.');
-    }
-}
+
+
 
 // Function to display expense
 function displayExpense(expense_obj) {
@@ -47,7 +42,7 @@ function displayExpense(expense_obj) {
     listItem.className = 'expense-item';  // Add a class for styling if needed
     
     // Display expense details
-    listItem.textContent = `Amount: ${expense_obj.amount}, Description: ${expense_obj.description}, Category: ${expense_obj.category}`;
+    listItem.innerHTML = `<strong>Date:</strong> ${expense_obj.date}, <strong>Name:</strong> ${expense_obj.name}, <strong>Amount</strong>: ${expense_obj.amount}, <strong>Category</strong>: ${expense_obj.category}`;
 
     // Add delete button
     const deleteButton = document.createElement('button');
@@ -57,20 +52,12 @@ function displayExpense(expense_obj) {
     };
     listItem.appendChild(deleteButton);
 
-    // Add edit button
-    // const editButton = document.createElement('button');
-    // editButton.textContent = 'Edit';
-    // editButton.onclick = function() {
-    //     editExpense(expense_obj, listItem);
-    // };
-    // listItem.appendChild(editButton);
-
-    // expensesList.appendChild(listItem);
+     expensesList.appendChild(listItem);
 }
 
 // Function to delete expense
 function deleteExpense(expense_obj, listItem) {
-    axios.delete(`http://localhost:8000/delete-expense/${expense_obj.id}`)
+    axios.delete(`http://localhost:8000/expense/delete-expense/${expense_obj.id}`)
         .then(response => {
             removeExpenseFromScreen(listItem);
             console.log('Expense deleted successfully:', response.data);
@@ -85,10 +72,11 @@ function removeExpenseFromScreen(listItem) {
     expensesList.removeChild(listItem);
 }
 window.addEventListener("DOMContentLoaded", () => {
-    axios.get('http://localhost:8000/expense/get-expense')
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:8000/expense/get-expense', { headers : {Authorization : token}})
         .then(response => {
-            for (let i = 0; i < response.data.allexpenses.length; i++) {
-                displayExpense(response.data.allexpenses[i]);
+            for (let i = 0; i < response.data.length; i++) {
+                displayExpense(response.data[i]);
             }
         })
         .catch(error => {

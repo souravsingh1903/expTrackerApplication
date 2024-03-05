@@ -2,11 +2,14 @@
 
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 const User = require("../models/databaseModel"); // Adjust the path based on your project structure
+
+const userAuthorization = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.post("/user/sign-up", async (req, res) => {
+router.post("/user/sign-up",async (req, res) => {
   try {
     const name = req.body.name;
     const email = req.body.email;
@@ -33,7 +36,11 @@ router.post("/user/sign-up", async (req, res) => {
   }
 });
 
-router.post("/user/login", async (req, res) => {
+function generateAccessToken(id){
+  return jwt.sign({userId : id}, 'thisIsMySeceretKey');
+}
+
+router.post("/user/login", userAuthorization.authenticate, async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -48,8 +55,11 @@ router.post("/user/login", async (req, res) => {
 
     if (passwordMatch) {
       // Password matches - User login successful
-      return res.json({ message: "User login successful" });
-    } else {
+      return res.status(201).json({
+        message: "User login successful",
+        token: generateAccessToken(user.userId),
+    });
+    }else {
       // Password doesn't match - User not authorized
       return res.status(401).json({ message: "User not authorized" });
     }

@@ -10,12 +10,15 @@ function login(event) {
 
     axios.post("http://localhost:8000/user/login", loginData)
         .then(response => {
-            console.log(response.data); // Logging the response data
+            console.log('Response data:', response.data);
+            localStorage.setItem('token', response.data.token);
+              window.location.href = "../html/expense.html"; // Redirect after successful login
         })
         .catch((error) => {
-            console.error(error);
+            console.error('Error:', error);
         });
 
-        document.getElementById('username').value = '';
-        document.getElementById('password').value = '';
+    // Optional: Clear input fields after submission
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
 }
