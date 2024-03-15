@@ -1,5 +1,9 @@
 // app.js
 const express = require('express');
+
+const dotenv = require('dotenv');
+dotenv.config(); 
+
 const sequelize = require('./util/databaseConnector');
 const User = require('./models/databaseModel');
 const Expenses = require('./models/expenses');
@@ -9,10 +13,8 @@ const userRoutes = require('./routes/userRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
 
-const app = express();
 
-const dotenv = require("dotenv");
-dotenv.config();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -28,8 +30,7 @@ User.hasMany(Order);
 Order.belongsTo(User);
 
 sequelize
-// .sync({force : true})
-.sync()
+.sync({force : false})
   .then(() => {
     console.log('Database synchronized');
   })

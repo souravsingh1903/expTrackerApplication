@@ -93,12 +93,12 @@ const expenseForm = document.getElementById('expenseForm');
 expenseForm.addEventListener('submit', handleFormSubmit);
 
 
-    async function buyPremium(e) {
+   document.getElementById('premiumBtn').onclick = async function(e) {
         const token = localStorage.getItem("token");
         const res = await axios.get("http://localhost:8000/purchase/premium-membership", {
-          headers: { Authorization: token },
+          headers: { "Authorization": token },
         });
-        //console.log(res);
+        // console.log(res.data.key_id);
         var options = {
           key: res.data.key_id, // Enter the Key ID generated from the Dashboard
           order_id : res.data.order.id, // For one time payment
@@ -111,10 +111,10 @@ expenseForm.addEventListener('submit', handleFormSubmit);
                 order_id: options.order_id,
                 payment_id: response.razorpay_payment_id,
               },
-              { headers: { Authorization: token } }
+              { headers: { "Authorization": token } }
             );
       
-            //console.log(res);
+            console.log(res);
             alert("Welcome to our Premium Membership");
             window.location.reload();
             localStorage.setItem("token", res.data.token);
@@ -128,6 +128,6 @@ expenseForm.addEventListener('submit', handleFormSubmit);
           console.log(response.error);
         });
        
-      } 
+      } ;
 
 

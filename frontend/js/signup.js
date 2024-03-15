@@ -14,6 +14,7 @@ function signUp(event) {
     axios.post("http://localhost:8000/user/sign-up", signUpData)
         .then(response => {
             console.log(response.data);
+            window.location.href = "login.html";
         })
         .catch((error) => {
             console.error(error);

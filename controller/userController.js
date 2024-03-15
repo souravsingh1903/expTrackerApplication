@@ -4,8 +4,8 @@ const User = require('../models/databaseModel');
 
 
 // routes/userRoutes.js
-function generateAccessToken(id) {
-    return jwt.sign({ userId : id}, 'thisIsMySecretKey');
+function generateAccessToken(id, name,ispremiumuser) {
+    return jwt.sign({ userId: id , name:name, ispremiumuser}, 'thisIsMySecretKey');
   }
 exports.signUp = async (req, res) => {
     try {
@@ -43,11 +43,7 @@ exports.signUp = async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, user.password);
   
       if (passwordMatch) {
-        const token = generateAccessToken(user.id);
-        console.log({
-          message: 'User login successful',
-          token: token,
-        });
+        const token = generateAccessToken(user.id,user.name, user.ispremiumuser);
         return res.status(201).json({
           message: 'User login successful',
           token: token,
