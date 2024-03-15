@@ -12,7 +12,7 @@ function login(event) {
         .then(response => {
             console.log('Response data:', response.data);
             localStorage.setItem('token', response.data.token);
-              window.location.href = "../html/expense.html"; // Redirect after successful login
+                  window.location.href = "../html/expense.html"; // Redirect after successful login
         })
         .catch((error) => {
             console.error('Error:', error);

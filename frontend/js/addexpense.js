@@ -1,5 +1,6 @@
 // addexpense.js
 
+
 // Function to handle form submission
 function handleFormSubmit(event) {
     event.preventDefault();
@@ -13,10 +14,10 @@ function handleFormSubmit(event) {
         date,
         name,
         amount,
-        category
+        category,
     };
-
-    axios.post('http://localhost:8000/expense/addExpense', expense_obj)
+    const token = localStorage.getItem('token');
+    axios.post('http://localhost:8000/expense/addExpense', expense_obj , { headers : {Authorization : token}})
         .then(response => {
             console.log('Expense added successfully:', response.data);
             displayExpense(response.data);  // Assuming the server sends back the created expense
@@ -57,7 +58,9 @@ function displayExpense(expense_obj) {
 
 // Function to delete expense
 function deleteExpense(expense_obj, listItem) {
-    axios.delete(`http://localhost:8000/expense/delete-expense/${expense_obj.id}`)
+    
+    const token = localStorage.getItem('token');
+    axios.delete(`http://localhost:8000/expense/delete-expense/${expense_obj.id}` , { headers : {Authorization : token}})
         .then(response => {
             removeExpenseFromScreen(listItem);
             console.log('Expense deleted successfully:', response.data);
@@ -76,6 +79,7 @@ window.addEventListener("DOMContentLoaded", () => {
     axios.get('http://localhost:8000/expense/get-expense', { headers : {Authorization : token}})
         .then(response => {
             for (let i = 0; i < response.data.length; i++) {
+
                 displayExpense(response.data[i]);
             }
         })
@@ -87,3 +91,43 @@ window.addEventListener("DOMContentLoaded", () => {
 // Attach form submission handler to the form
 const expenseForm = document.getElementById('expenseForm');
 expenseForm.addEventListener('submit', handleFormSubmit);
+
+
+    async function buyPremium(e) {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:8000/purchase/premium-membership", {
+          headers: { Authorization: token },
+        });
+        //console.log(res);
+        var options = {
+          key: res.data.key_id, // Enter the Key ID generated from the Dashboard
+          order_id : res.data.order.id, // For one time payment
+          // This handler function will handle the success payment
+          handler: async function (response) {
+            console.log(response);
+            const res = await axios.post(
+              "http://localhost:8000/purchase/updateTransactionStatus",
+              {
+                order_id: options.order_id,
+                payment_id: response.razorpay_payment_id,
+              },
+              { headers: { Authorization: token } }
+            );
+      
+            //console.log(res);
+            alert("Welcome to our Premium Membership");
+            window.location.reload();
+            localStorage.setItem("token", res.data.token);
+          },
+        };
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+        e.preventDefault();
+        rzp1.on("payment.failed", async function (response) {
+          alert("failed");
+          console.log(response.error);
+        });
+       
+      } 
+
+
