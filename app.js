@@ -30,7 +30,7 @@ User.hasMany(Order);
 Order.belongsTo(User);
 
 sequelize
-.sync({force : false})
+.sync({force :  false})
   .then(() => {
     console.log('Database synchronized');
   })

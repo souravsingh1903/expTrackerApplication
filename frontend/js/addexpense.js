@@ -93,41 +93,53 @@ const expenseForm = document.getElementById('expenseForm');
 expenseForm.addEventListener('submit', handleFormSubmit);
 
 
-   document.getElementById('premiumBtn').onclick = async function(e) {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:8000/purchase/premium-membership", {
-          headers: { "Authorization": token },
-        });
-        // console.log(res.data.key_id);
-        var options = {
-          key: res.data.key_id, // Enter the Key ID generated from the Dashboard
-          order_id : res.data.order.id, // For one time payment
-          // This handler function will handle the success payment
-          handler: async function (response) {
-            console.log(response);
-            const res = await axios.post(
-              "http://localhost:8000/purchase/updateTransactionStatus",
-              {
-                order_id: options.order_id,
-                payment_id: response.razorpay_payment_id,
-              },
-              { headers: { "Authorization": token } }
-            );
-      
-            console.log(res);
-            alert("Welcome to our Premium Membership");
-            window.location.reload();
-            localStorage.setItem("token", res.data.token);
+async function buyPremium(e) {
+    const token = localStorage.getItem("token");
+    const res = await axios.get("http://localhost:8000/purchase/premium", {
+      headers: { Authorization: token },
+    });
+    //console.log(res);
+    var options = {
+      key: res.data.key_id, // Enter the Key ID generated from the Dashboard
+      order_id: res.data.order, // For one time payment
+      // This handler function will handle the success payment
+      handler: async function (response) {
+        console.log(response);
+        const res = await axios.post(
+          "http://localhost:8000/purchase/updateTransactionStatus",
+          {
+            order_id: options.order_id,
+            payment_id: response.razorpay_payment_id,
           },
-        };
-        const rzp1 = new Razorpay(options);
-        rzp1.open();
-        e.preventDefault();
-        rzp1.on("payment.failed", async function (response) {
-          alert("failed");
-          console.log(response.error);
-        });
-       
-      } ;
+          { headers: { Authorization: token } }
+        );
+  
+        //console.log(res);
+        alert("Welcome to our Premium Membership");
+        window.location.reload();
+        localStorage.setItem("token", res.data.token);
+      },
+    };
+    const rzp1 = new Razorpay(options);
+    rzp1.on("payment.failed", async function (response) {
+      alert("failed");
+      console.log(response.error);
+      const res = await axios.post(
+        "http://localhost:8000/purchase/failed",
+        {
+          order_id: options.order_id,
+          payment_id: response.error.metadata.payment_id,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      console.log(res);
+    });
+    rzp1.open();
+    e.preventDefault();
+  }
 
 

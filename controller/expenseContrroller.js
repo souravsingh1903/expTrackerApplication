@@ -26,6 +26,7 @@ const Expense = require('../models/expenses');
       })
       
       } catch (e) {
+        
       console.error(`Error getting expenses : ${e}`);
       res.status(400).json({ "Error": `Error getting expenses : ${e}` });
     }
