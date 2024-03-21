@@ -91,7 +91,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if(ispremium)
         {
             showPremiumMessage();
-            showLeaderBoard();
+                showLeaderBoard();
            
         }
     axios.get('http://localhost:8000/expense/get-expense', { headers : {Authorization : token}})
@@ -189,18 +189,41 @@ async function buyPremium(e) {
 
             const leaderBoardElem = document.getElementsByClassName('leaderboard')[0]; // Select the first element
             if (leaderBoardElem) {
-                leaderBoardElem.innerHTML = `<h1>Leader Board</h1>`; // Clear previous content
-                userLeaderBoard.data.forEach((userDetails) => {
-                    leaderBoardElem.innerHTML += `<li> Name - ${userDetails.name} Total Expense - ${userDetails.total_cost}</li>`;
-                });
+                leaderBoardElem.innerHTML = ''; // Clear previous content
+                const table = document.createElement('table');
+                table.style.width = '100%';
+                table.style.borderCollapse = 'collapse';
+                table.innerHTML = `
+                    <thead>
+                        <tr style="background-color: #2ecc71; color: white;">
+                            <th style="padding: 10px; border: 1px solid #dddddd;">Name</th>
+                            <th style="padding: 10px; border: 1px solid #dddddd;">Total Expense</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${userLeaderBoard.data.map((userDetails, index) => `
+                            <tr style="background-color: ${index % 2 === 0 ? '#f2f2f2' : 'white'};">
+                                <td style="padding: 10px; border: 1px solid #dddddd;">${userDetails.name}</td>
+                                <td style="padding: 10px; border: 1px solid #dddddd;">${userDetails.total_cost === null ? 0 : userDetails.total_cost}  </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                leaderBoardElem.appendChild(table);
             } else {
                 console.error("Leaderboard element not found.");
             }
+            leaderboard_btn.value = 'Close Leaderboard';
+            leaderboard_btn.onclick =  hideLeaderBoard();
+
         } catch (error) {
             console.error("Error fetching leaderboard:", error);
         }
     };
     document.getElementById('expenseForm').appendChild(leaderboard_btn);
 }
+   
+
+
 
 

@@ -31,24 +31,33 @@ exports.getLeaderBoard = async (req, res) => {
         // leaderBoardDetails.sort((a, b) => b.total_cost - a.total_cost); // Sort in descending order
 
         // res.status(200).json(expenses);
-        const userLeaderBoard = await User.findAll({
-            attributes: [
-                'id',
-                'name',
-                [sequelize.fn('sum', sequelize.col('Expenses.amount')), 'total_cost']
-            ],
-            include: [
-                {
-                    model: Expenses,
-                    attributes: []
-                }
-            ],
-            group: ['Users.id'],
-            order: [[sequelize.literal('total_cost'), 'DESC']]
-        });
-        console.log(userLeaderBoard);
 
-        res.status(200).json(userLeaderBoard);
+// OPTIMIZATION
+
+        // const userLeaderBoard = await User.findAll({
+        //     attributes: [
+        //         'id',
+        //         'name',
+        //         [sequelize.fn('sum', sequelize.col('Expenses.amount')), 'total_cost']
+        //     ],
+        //     include: [
+        //         {
+        //             model: Expenses,
+        //             attributes: []
+        //         }
+        //     ],
+        //     group: ['Users.id'],
+        //     order: [[sequelize.literal('total_cost'), 'DESC']]
+        // });
+
+
+        const leaderboardofusers = await User.findAll({
+            attributes:['id','name','totalExpense'],
+            group:['id'],
+            order:[['totalExpense','DESC']]
+        })
+       
+        res.status(200).json(leaderboardofusers);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Internal Server Error" });
