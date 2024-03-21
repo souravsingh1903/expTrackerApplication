@@ -4,8 +4,8 @@ const User = require('../models/databaseModel');
 
 
 // routes/userRoutes.js
-function generateAccessToken(id, name,ispremiumuser) {
-    return jwt.sign({ userId: id , name:name, ispremiumuser}, 'thisIsMySecretKey');
+exports.generateAccessToken = (id, name,isPremiumUser) => {
+    return jwt.sign({ userId: id , name:name, isPremiumUser}, 'thisIsMySecretKey');
   }
 exports.signUp = async (req, res) => {
     try {
@@ -43,7 +43,7 @@ exports.signUp = async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, user.password);
   
       if (passwordMatch) {
-        const token = generateAccessToken(user.id,user.name, user.ispremiumuser);
+        const token = exports.generateAccessToken(user.id,user.name, user.isPremiumUser);
         return res.status(201).json({
           message: 'User login successful',
           token: token,
@@ -56,3 +56,15 @@ exports.signUp = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error', details: error.message });
     } 
 }
+
+
+
+// exports.isPremiumUser = async (req, res, next) => {
+//   try {
+//     if (req.user.isPremiumUser) {
+//       return res.json({ isPremiumUser: true });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

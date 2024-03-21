@@ -9,9 +9,13 @@ const User = require('./models/databaseModel');
 const Expenses = require('./models/expenses');
 const Order = require('./models/orders');
 const cors = require('cors');
+
+// Routes
 const userRoutes = require('./routes/userRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
+const premiumFeatureRoutes =  require('./routes/premiumFeaturesRoutes');
+
 
 
 const app = express();
@@ -22,6 +26,7 @@ app.use(express.json());
 app.use(userRoutes);
 app.use(expenseRoutes);
 app.use(purchaseRoutes);
+app.use(premiumFeatureRoutes);
 
 User.hasMany(Expenses);
 Expenses.belongsTo(User);

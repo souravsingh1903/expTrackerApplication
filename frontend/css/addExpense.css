@@ -84,6 +84,7 @@ button:hover {
 }
 
 
+
 #expenseList li button {
   position: absolute;
   top: 50%;
@@ -132,4 +133,14 @@ strong {
 }
 
 /* Add any additional styling as per your requirement */
+
+/* Apply the animation to the message */
+#message {
+ 
+  font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
 

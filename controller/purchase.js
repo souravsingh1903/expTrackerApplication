@@ -33,6 +33,8 @@ exports.purchasePremium = async (req, res) => {
 exports.updateTransactionStatus = async (req, res) => {
   try {
     console.log(req.body)
+    let userId = req.user.id;
+    const name = req.user.name;
     const { payment_id, order_id } = req.body;
     console.log(req.body)
     const Order = await order.findOne({ where: { orderid: order_id } });
@@ -49,7 +51,7 @@ exports.updateTransactionStatus = async (req, res) => {
       .then(() => {
         return res
           .status(202)
-          .json({ success: true, message: "Transaction Successful" });
+          .json({ success: true, message: "Transaction Successful" , token : userController.generateAccessToken(userId, name, true)});
       })
       .catch((err) => {
         throw new Error(err);
