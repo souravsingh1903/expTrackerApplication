@@ -9,7 +9,7 @@ const router = express.Router();
 router.post("/user/sign-up",userController.signUp);
 
 
-
+console.log("user routes working");
 router.post('/user/login', userController.login);
 
 module.exports = router;

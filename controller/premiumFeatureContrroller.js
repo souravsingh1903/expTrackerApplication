@@ -51,13 +51,13 @@ exports.getLeaderBoard = async (req, res) => {
         // });
 
 
-        const leaderboardofusers = await User.findAll({
-            attributes:['id','name','totalExpense'],
-            group:['id'],
-            order:[['totalExpense','DESC']]
+        const userLeaderBoard = await User.findAll({
+             attributes:['id','name','totalExpense'],
+            // group:['Users.id'],
+            order:[['totalExpense','DESC']],
         })
        
-        res.status(200).json(leaderboardofusers);
+        res.status(200).json(userLeaderBoard);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Internal Server Error" });

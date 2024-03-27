@@ -1,3 +1,4 @@
+
 // addexpense.j
 
 // Function to handle form submission
@@ -204,7 +205,7 @@ async function buyPremium(e) {
                         ${userLeaderBoard.data.map((userDetails, index) => `
                             <tr style="background-color: ${index % 2 === 0 ? '#f2f2f2' : 'white'};">
                                 <td style="padding: 10px; border: 1px solid #dddddd;">${userDetails.name}</td>
-                                <td style="padding: 10px; border: 1px solid #dddddd;">${userDetails.total_cost === null ? 0 : userDetails.total_cost}  </td>
+                                <td style="padding: 10px; border: 1px solid #dddddd;">${userDetails.totalExpense === null ? 0 : userDetails.totalExpense}  </td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -223,7 +224,3 @@ async function buyPremium(e) {
     document.getElementById('expenseForm').appendChild(leaderboard_btn);
 }
    
-
-
-
-
